@@ -171,9 +171,7 @@ def dryveInit():
     set_mode(1)
 
 
-dryveInit()
 
 # Never input target position lower than 1. It will trigger the limit switch.
 
-targetPosition(1)
 

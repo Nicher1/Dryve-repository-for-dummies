@@ -5,15 +5,15 @@ try:
 except(IOError, ImportError):
     long_description = open('README.md').read()
 setuptools.setup(
-    name="Create Drive Rail",
-    version="1.0.1",
+    name="createdryverail",
+    version="1.0.0",
     author="Nichlas Overgaard Laugesen, Elias Thomassen Dam",
     description="Dryve D1 script created by 2 undergraduate robotic students of Aalborg University",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    packages=["createdriverail"],
+    packages=["createdryverail"],
     url="https://github.com/Nicher1/Dryve-repository-for-dummies.git",
-    licence="Mozilla Public License",
+    licence="MIT",
     keywords='robotics DryveD1 Python Script Rail Create',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -29,7 +29,7 @@ setuptools.setup(
         'Source': 'https://github.com/Nicher1/Dryve-repository-for-dummies',
         'Tracker': 'https://github.com/Nicher1/Dryve-repository-for-dummies/issues',
     },
-    install_requires=['socket'],
+    install_requires=['sockets'],
     python_requires='>=3.6,==3.*',
     package_data={
         'Guide': ['How to control the Create Rail over Dryve D1 over Python.pdf'],
