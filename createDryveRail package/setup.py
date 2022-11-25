@@ -6,7 +6,7 @@ except(IOError, ImportError):
     long_description = open('README.md').read()
 setuptools.setup(
     name="createdryverail",
-    version="1.0.0",
+    version="2.0.0",
     author="Nichlas Overgaard Laugesen, Elias Thomassen Dam",
     description="Dryve D1 script created by 2 undergraduate robotic students of Aalborg University",
     long_description=long_description,

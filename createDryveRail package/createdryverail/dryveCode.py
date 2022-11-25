@@ -1,6 +1,10 @@
 import socket
 import time
 
+# Variables
+profileAcceleration = 300
+profileDeceleration = 300
+
 HOST = "172.31.1.101"
 PORT = 503
 
@@ -25,6 +29,8 @@ switchOn_array = bytearray(switchOn)
 enableOperation = [0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x40, 0, 0, 0, 0, 2, 15, 0]
 enableOperation_array = bytearray(enableOperation)
 
+def extractBytes(integer):
+    return divmod(integer, 0x100)[::-1]
 
 # Function for shutdown
 def set_shdn():
@@ -65,7 +71,7 @@ def set_op_en():
         time.sleep(1)
 
 
-def set_mode(mode):
+def setMode(mode):
     # Set operation modes in object 6060h Modes of Operation
     sendCommand(bytearray([0, 0, 0, 0, 0, 14, 0, 43, 13, 1, 0, 0, 96, 96, 0, 0, 0, 0, 1, mode]))
     while (sendCommand(bytearray([0, 0, 0, 0, 0, 13, 0, 43, 13, 0, 0, 0, 96, 97, 0, 0, 0, 0, 1])) != [0, 0, 0, 0, 0, 14,
@@ -86,11 +92,17 @@ def startProcedure():
     set_shdn()
     set_swon()
     set_op_en()
+    setMode(1)
+    # set velocity and acceleration of profile
+    sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x81, 0, 0, 0, 0, 2, 0x2c, 0x1]))
+    # Profile acceleration set below
+    sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x83, 0, 0, 0, 0, 2, extractBytes(profileAcceleration)[0], extractBytes(profileAcceleration)[1]]))
+    # Profile deacceleration set below
+    sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x84, 0, 0, 0, 0, 2, extractBytes(profileDeceleration)[0], extractBytes(profileDeceleration)[1]]))
 
 
 def targetPosition(target, rw=1):
-    def extractBytes(integer):
-        return divmod(integer, 0x100)[::-1]
+    setMode(1)
 
     # Check if target datavalue is within range
     if target > 0xffff:
@@ -105,12 +117,6 @@ def targetPosition(target, rw=1):
         targetPos_array = bytearray(targetPos)
         sendCommand(targetPos_array)
 
-        # set velocity and acceleration of profile
-        sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x81, 0, 0, 0, 0, 2, 0x2c, 0x1]))
-        # Profile acceleration set below
-        sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x83, 0, 0, 0, 0, 2, 0x2c, 0x1]))
-        # Profile deacceleration set below
-        sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x84, 0, 0, 0, 0, 2, 0x2c, 0x1]))
 
         # Execute command
         sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, rw, 0, 0, 0x60, 0x40, 0, 0, 0, 0, 2, 0x1f, 0x0]))
@@ -136,7 +142,7 @@ def sendCommand(data):
 
 
 def homing():
-    set_mode(6)
+    setMode(6)
 
     setHomingMethodLSN = [0, 0, 0, 0, 0, 14, 0, 43, 13, write, 0, 0, 96, 152, 0, 0, 0, 0, 1, 17]
     setHomingMethodLSN_array = bytearray(setHomingMethodLSN)
@@ -165,12 +171,43 @@ def homing():
     sendCommand(enableOperation_array)
 
 
+# Definition of the function to send velocity data and convert decimal to 1/2-byte.
+def targetVelocity(target):
+    setMode(3)
+    def extractBytes(integer):
+        return divmod(integer, 0x100)[::-1]
+    if target > 0xffff:
+        print("Invalid target velocity specified")
+    else:
+        if target > 255:  # If the target is over 2 bytes large, split the data correctly into two seperate bytes.
+            targetVel2Byt = extractBytes(target)
+            # set velocity and acceleration of profile
+            sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0xFF, 0, 0, 0, 0, 2, targetVel2Byt[0], targetVel2Byt[1]]))
+        elif target <= 255:
+            # set velocity and acceleration of profile
+            sendCommand(bytearray(
+                [0, 0, 0, 0, 0, 14, 0, 43, 13, 1, 0, 0, 0x60, 0xFF, 0, 0, 0, 0, 1, target]))
+
+def profileVelocity(target):
+    def extractBytes(integer):
+        return divmod(integer, 0x100)[::-1]
+    if target > 0xffff or target == 0:
+        print("Invalid target velocity specified")
+    else:
+        if target > 255:  # If the target is over 2 bytes large, split the data correctly into two seperate bytes.
+            targetVel2Byt = extractBytes(target)
+            # set velocity and acceleration of profile
+            sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x81, 0, 0, 0, 0, 2, targetVel2Byt[0], targetVel2Byt[1]]))
+        elif target <= 255:
+            # set velocity and acceleration of profile
+            sendCommand(bytearray(
+                [0, 0, 0, 0, 0, 14, 0, 43, 13, 1, 0, 0, 0x60, 0x81, 0, 0, 0, 0, 1, target]))
+
+
 def dryveInit():
     startProcedure()
     homing()
-    set_mode(1)
-
-
+    setMode(1)
 
 # Never input target position lower than 1. It will trigger the limit switch.
 
