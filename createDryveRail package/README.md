@@ -1,10 +1,10 @@
 # Create Dryve Rail
 
 The following library is to be used for translation along the x-axis of a track controlled by the Dryve D1.
-![Negative end switch (set on right side)](https://i.imgur.com/00q584T.png)
+[![Negative end switch (set on right side)](https://i.imgur.com/00q584T.png)](https://gfycat.com/UnlinedDisloyalLamb)
 Movement of the platform along the x-axis can be done with the:
 ```python    
-targetPosition(<point>) command.
+targetPosition(<point>) 
 ```
 The point is set in reference to the *home* position set at the negative end-switch.
 As the end-switch's home position is then set to x = 0 at the designated *home* position, any input into the function is considered as relative to the universal frame set at this position. 
@@ -16,11 +16,17 @@ To manually set this position for any reason, simply run:
 ```python
 homing()
 ```
+To get current position of the Dryve rail, simply use:
+```python
+getposition(<position (mm)>)
+```
+As indicated, the function returns position of the rail at execution in millimetres.
+
 To set velocity profile, simply run:
 ```python
 velocityProfile(<velocity (mm/s)>)
 ```
-likewise, the target velocity can be set with:
+Likewise, the target velocity can be set with:
 ```python
 targetVelocity(<velocity (mm/s)>)
 ```

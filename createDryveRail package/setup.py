@@ -6,7 +6,7 @@ except(IOError, ImportError):
     long_description = open('README.md').read()
 setuptools.setup(
     name="createdryverail",
-    version="2.5.0",
+    version="2.5.4",
     author="Nichlas Overgaard Laugesen, Elias Thomassen Dam",
     description="Dryve D1 script created by 2 undergraduate robotic students of Aalborg University",
     long_description=long_description,
@@ -20,12 +20,15 @@ setuptools.setup(
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
     ],
     project_urls={
-        'Documentation': 'https://github.com/Nicher1/Dryve-repository-for-dummies',
+        'Documentation': 'https://github.com/Nicher1/Dryve-repository-for-dummies/blob/ea2a13148326c3a56b38ba7431e67c0386931784/createDriveRail%20package/How%20to%20control%20the%20Dryve%20D1%20over%20Python.pdf',
         'Source': 'https://github.com/Nicher1/Dryve-repository-for-dummies',
         'Tracker': 'https://github.com/Nicher1/Dryve-repository-for-dummies/issues',
     },

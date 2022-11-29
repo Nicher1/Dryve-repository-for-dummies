@@ -1,11 +1,11 @@
 Metadata-Version: 2.1
 Name: createdryverail
-Version: 2.5.0
+Version: 2.5.4
 Summary: Dryve D1 script created by 2 undergraduate robotic students of Aalborg University
 Home-page: https://github.com/Nicher1/Dryve-repository-for-dummies.git
 Author: Nichlas Overgaard Laugesen, Elias Thomassen Dam
 License: MIT
-Project-URL: Documentation, https://github.com/Nicher1/Dryve-repository-for-dummies
+Project-URL: Documentation, https://github.com/Nicher1/Dryve-repository-for-dummies/blob/ea2a13148326c3a56b38ba7431e67c0386931784/createDriveRail%20package/How%20to%20control%20the%20Dryve%20D1%20over%20Python.pdf
 Project-URL: Source, https://github.com/Nicher1/Dryve-repository-for-dummies
 Project-URL: Tracker, https://github.com/Nicher1/Dryve-repository-for-dummies/issues
 Keywords: robotics DryveD1 Python Script Rail Create
@@ -13,6 +13,9 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Software Development :: Libraries
 Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
@@ -22,10 +25,10 @@ Description-Content-Type: text/markdown
 # Create Dryve Rail
 
 The following library is to be used for translation along the x-axis of a track controlled by the Dryve D1.
-![Negative end switch (set on right side)](https://i.imgur.com/00q584T.png)
+[![Negative end switch (set on right side)](https://i.imgur.com/00q584T.png)](https://gfycat.com/UnlinedDisloyalLamb)
 Movement of the platform along the x-axis can be done with the:
 ```python    
-targetPosition(<point>) command.
+targetPosition(<point>) 
 ```
 The point is set in reference to the *home* position set at the negative end-switch.
 As the end-switch's home position is then set to x = 0 at the designated *home* position, any input into the function is considered as relative to the universal frame set at this position. 
@@ -37,11 +40,17 @@ To manually set this position for any reason, simply run:
 ```python
 homing()
 ```
+To get current position of the Dryve rail, simply use:
+```python
+getposition(<position (mm)>)
+```
+As indicated, the function returns position of the rail at execution in millimetres.
+
 To set velocity profile, simply run:
 ```python
 velocityProfile(<velocity (mm/s)>)
 ```
-likewise, the target velocity can be set with:
+Likewise, the target velocity can be set with:
 ```python
 targetVelocity(<velocity (mm/s)>)
 ```

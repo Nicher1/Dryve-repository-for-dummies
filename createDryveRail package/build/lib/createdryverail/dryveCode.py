@@ -1,3 +1,5 @@
+# Created by Laugesen, Nichlas O.; Dam, Elias Thomassen.
+# built from "Manual/Operating Manual dryve D1 EN V3.0.1.pdf"
 import socket
 import time
 read = 0

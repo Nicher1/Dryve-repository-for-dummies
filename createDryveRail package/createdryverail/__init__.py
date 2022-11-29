@@ -1,1 +1,1 @@
-from .dryveCode import targetPosition, dryveInit, homing, targetVelocity, profileVelocity
+from .dryveCode import targetPosition, dryveInit, homing, targetVelocity, profileVelocity, getPosition
