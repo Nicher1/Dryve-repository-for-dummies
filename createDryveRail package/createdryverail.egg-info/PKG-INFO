@@ -1,11 +1,11 @@
 Metadata-Version: 2.1
 Name: createdryverail
-Version: 2.5.4
+Version: 2.5.5
 Summary: Dryve D1 script created by 2 undergraduate robotic students of Aalborg University
 Home-page: https://github.com/Nicher1/Dryve-repository-for-dummies.git
 Author: Nichlas Overgaard Laugesen, Elias Thomassen Dam
 License: MIT
-Project-URL: Documentation, https://github.com/Nicher1/Dryve-repository-for-dummies/blob/ea2a13148326c3a56b38ba7431e67c0386931784/createDriveRail%20package/How%20to%20control%20the%20Dryve%20D1%20over%20Python.pdf
+Project-URL: Documentation, https://github.com/Nicher1/Dryve-repository-for-dummies/blob/main/createDryveRail%20package/How%20to%20control%20the%20Dryve%20D1%20over%20Python.pdf
 Project-URL: Source, https://github.com/Nicher1/Dryve-repository-for-dummies
 Project-URL: Tracker, https://github.com/Nicher1/Dryve-repository-for-dummies/issues
 Keywords: robotics DryveD1 Python Script Rail Create
