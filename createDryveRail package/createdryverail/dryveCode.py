@@ -1,43 +1,43 @@
 import socket
 import time
-
-# Variables
+read = 0
+write = 1
 profileAcceleration = 300
 profileDeceleration = 300
-
 HOST = "172.31.1.101"
 PORT = 503
 
-read = 0
-write = 1
+
 
 # Create TCP/IP connection
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
+# Variables
+def establishConnection():
+    s.connect((HOST, PORT))
 
 # Commands/arrays -------------------------------------------
 
 status = [0, 0, 0, 0, 0, 13, 0, 43, 13, read, 0, 0, 96, 65, 0, 0, 0, 0, 2]
-status_array = bytearray(status)
+statusArray = bytearray(status)
 
 shutdown = [0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 96, 64, 0, 0, 0, 0, 2, 6, 0]
-shutdown_array = bytearray(shutdown)
+shutdownArray = bytearray(shutdown)
 
 switchOn = [0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 96, 64, 0, 0, 0, 0, 2, 7, 0]
-switchOn_array = bytearray(switchOn)
+switchOnArray = bytearray(switchOn)
 
 enableOperation = [0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x40, 0, 0, 0, 0, 2, 15, 0]
-enableOperation_array = bytearray(enableOperation)
+enableOperationArray = bytearray(enableOperation)
 
 def extractBytes(integer):
     return divmod(integer, 0x100)[::-1]
 
 # Function for shutdown
-def set_shdn():
-    sendCommand(shutdown_array)
-    while (sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 33, 6]
-           and sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 33, 22]
-           and sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 33, 2]):
+def setShdn():
+    sendCommand(shutdownArray)
+    while (sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 33, 6]
+           and sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 33, 22]
+           and sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 33, 2]):
         print("wait for shutdown")
 
         # 1 Sekunde Verzoegerung
@@ -46,11 +46,11 @@ def set_shdn():
 
 
 # Function for switching on
-def set_swon():
-    sendCommand(switchOn_array)
-    while (sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 35, 6]
-           and sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 35, 22]
-           and sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 35, 2]):
+def setSwon():
+    sendCommand(switchOnArray)
+    while (sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 35, 6]
+           and sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 35, 22]
+           and sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 35, 2]):
         print("wait for switch on")
 
         # 1 Sekunde Verzoegerung
@@ -59,11 +59,11 @@ def set_swon():
 
 
 # Function for enabling operation
-def set_op_en():
-    sendCommand(enableOperation_array)
-    while (sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 39, 6]
-           and sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 39, 22]
-           and sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 39, 2]):
+def setOpEn():
+    sendCommand(enableOperationArray)
+    while (sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 39, 6]
+           and sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 39, 22]
+           and sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 96, 65, 0, 0, 0, 0, 2, 39, 2]):
         print("wait for op en")
 
         # 1 Sekunde Verzoegerung
@@ -84,14 +84,14 @@ def setMode(mode):
 
 def startProcedure():
     reset = [0, 0, 0, 0, 0, 15, 0, 43, 13, write, 0, 0, 96, 64, 0, 0, 0, 0, 2, 0, 1]
-    reset_array = bytearray(reset)
-    sendCommand(reset_array)
+    resetArray = bytearray(reset)
+    sendCommand(resetArray)
 
-    sendCommand(status_array)
+    sendCommand(statusArray)
 
-    set_shdn()
-    set_swon()
-    set_op_en()
+    setShdn()
+    setSwon()
+    setOpEn()
     setMode(1)
     # set velocity and acceleration of profile
     sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x81, 0, 0, 0, 0, 2, 0x2c, 0x1]))
@@ -114,8 +114,8 @@ def targetPosition(target, rw=1):
                          target2Byt[1]]
         elif target <= 255:
             targetPos = [0, 0, 0, 0, 0, 14, 0, 43, 13, rw, 0, 0, 0x60, 0x7a, 0, 0, 0, 0, 1, target]
-        targetPos_array = bytearray(targetPos)
-        sendCommand(targetPos_array)
+        targetPosArray = bytearray(targetPos)
+        sendCommand(targetPosArray)
 
 
         # Execute command
@@ -124,11 +124,11 @@ def targetPosition(target, rw=1):
         time.sleep(0.01)
 
         # Check Statusword for target reached
-        while (sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 0x60, 0x41, 0, 0, 0, 0, 2, 39, 22]):
+        while (sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 0x60, 0x41, 0, 0, 0, 0, 2, 39, 22]):
             # 1 second delay
             time.sleep(0.01)
 
-        sendCommand(enableOperation_array)
+        sendCommand(enableOperationArray)
 
 
 # Definition of the function to send and receive data
@@ -140,13 +140,20 @@ def sendCommand(data):
     # print(list(res))
     return list(res)
 
+def getPosition():
+    getPositionFromDryve = bytearray([0, 0, 0, 0, 0, 13, 0, 43, 13, read, 0, 0, 0x60, 0x64, 0, 0, 0, 0, 4])
+    positionRaw = sendCommand(getPositionFromDryve)
+    position = 0
+    for i in range(4):
+        position = position + positionRaw[i+19] * 256 ** i
+    return position
 
 def homing():
     setMode(6)
 
     setHomingMethodLSN = [0, 0, 0, 0, 0, 14, 0, 43, 13, write, 0, 0, 96, 152, 0, 0, 0, 0, 1, 17]
-    setHomingMethodLSN_array = bytearray(setHomingMethodLSN)
-    sendCommand(setHomingMethodLSN_array)
+    setHomingMethodLSNArray = bytearray(setHomingMethodLSN)
+    sendCommand(setHomingMethodLSNArray)
 
     # Set homing speeds 6099h
     sendCommand(bytearray([0, 0, 0, 0, 0, 14, 0, 43, 13, 1, 0, 0, 0x60, 0x99, 0, 0, 0, 0, 1, 200]))
@@ -162,13 +169,13 @@ def homing():
     # Start Homing 6040h
     sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x40, 0, 0, 0, 0, 2, 0x1f, 0]))
 
-    while (sendCommand(status_array) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 0x60, 0x41, 0, 0, 0, 0, 2, 39, 22]):
+    while (sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 0x60, 0x41, 0, 0, 0, 0, 2, 39, 22]):
         # 1 second delay
         time.sleep(0.1)
 
     print("Homing complete")
 
-    sendCommand(enableOperation_array)
+    sendCommand(enableOperationArray)
 
 
 # Definition of the function to send velocity data and convert decimal to 1/2-byte.
@@ -205,10 +212,9 @@ def profileVelocity(target):
 
 
 def dryveInit():
+    establishConnection()
     startProcedure()
     homing()
     setMode(1)
 
 # Never input target position lower than 1. It will trigger the limit switch.
-
-
