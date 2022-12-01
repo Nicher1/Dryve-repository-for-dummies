@@ -123,12 +123,12 @@ def targetPosition(target, rw=1):
         # Execute command
         sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, rw, 0, 0, 0x60, 0x40, 0, 0, 0, 0, 2, 0x1f, 0x0]))
 
-        time.sleep(0.01)
+        time.sleep(0.001)
 
         # Check Statusword for target reached
         while (sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 0x60, 0x41, 0, 0, 0, 0, 2, 39, 22]):
             # 1 second delay
-            time.sleep(0.01)
+            time.sleep(0.001)
 
         sendCommand(enableOperationArray)
 
@@ -171,6 +171,7 @@ def homing():
     # Start Homing 6040h
     sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0x40, 0, 0, 0, 0, 2, 0x1f, 0]))
 
+
     while (sendCommand(statusArray) != [0, 0, 0, 0, 0, 15, 0, 43, 13, 0, 0, 0, 0x60, 0x41, 0, 0, 0, 0, 2, 39, 22]):
         # 1 second delay
         time.sleep(0.1)
@@ -183,19 +184,35 @@ def homing():
 # Definition of the function to send velocity data and convert decimal to 1/2-byte.
 def targetVelocity(target):
     setMode(3)
-    def extractBytes(integer):
-        return divmod(integer, 0x100)[::-1]
+
+    # def extractBytes(integer):
+    #     return (integer).to_bytes(4, byteorder='big', signed=True)
+
+        # global bytes
+        # bytes = divmod(integer, 0x100)[::-1]
+        # if bytes[-1] < 0:
+        #     bytes = list(bytes)
+        #     bytes[-1] = bytes[-1] * -1
+        #     bytes = bytes + [0, 15]
+        #     return tuple(bytes)
+        # else:
+        #     bytes = list(bytes)
+        #     bytes = bytes + [0, 0]
+        #     return tuple(bytes)
+
+
+
     if target > 0xffff:
         print("Invalid target velocity specified")
     else:
-        if target > 255:  # If the target is over 2 bytes large, split the data correctly into two seperate bytes.
-            targetVel2Byt = extractBytes(target)
-            # set velocity and acceleration of profile
-            sendCommand(bytearray([0, 0, 0, 0, 0, 15, 0, 43, 13, 1, 0, 0, 0x60, 0xFF, 0, 0, 0, 0, 2, targetVel2Byt[0], targetVel2Byt[1]]))
-        elif target <= 255:
-            # set velocity and acceleration of profile
-            sendCommand(bytearray(
-                [0, 0, 0, 0, 0, 14, 0, 43, 13, 1, 0, 0, 0x60, 0xFF, 0, 0, 0, 0, 1, target]))
+        targetVel2Byt = (target).to_bytes(4, byteorder='little', signed=True)
+        print(targetVel2Byt)
+            #extractBytes(target)
+        #print(targetVel2Byt)
+
+        # set velocity of profile
+        sendCommand(bytearray([0, 0, 0, 0, 0, 17, 0, 43, 13, write, 0, 0, 0x60, 0xFF, 0, 0, 0, 0, 4]) + targetVel2Byt)
+        #print(bytearray([0, 0, 0, 0, 0, 17, 0, 43, 13, write, 0, 0, 0x60, 0xFF, 0, 0, 0, 0, 4]) + targetVel2Byt)
 
 def profileVelocity(target):
     def extractBytes(integer):
